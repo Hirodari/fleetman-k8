@@ -15,7 +15,7 @@ comparing Kubernetes to docker-compose
 
 ##### deploying our simple k8s app #####
 on the root folder
-mkdir simplek8s
+mkdir simple
 create a file : client-pod.yaml
 
 apiVersion: v1

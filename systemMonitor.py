@@ -82,6 +82,7 @@ def main():
                 f"Summary of the disk usage: \
                 \n{'='*30} \
                 \n \
+                \{datetime.now().strftime('%d-%m-%Y %H:%M:%S')} \
                 \nHostname: {hostname} \
                 \nThe device: {device} \
                 \nMounted on: / \
@@ -96,6 +97,7 @@ def main():
         send_email("CPU Usage Alert", 
             f"Summary of CPU usage: \
             \n{'='*30} \
+            \n{datetime.now().strftime('%d-%m-%Y %H:%M:%S')} \
             \nHostname: {hostname} \
             \nThe device: {device} \
             \nThe CPU usage is {cpu_percent}%.")
@@ -104,6 +106,7 @@ def main():
         send_email("Memory Usage Alert", 
             f"Summary of Memory usage: \
             \n{'='*20} \
+            \n{datetime.now().strftime('%d-%m-%Y %H:%M:%S')} \
             \nHostname: {hostname} \
             \nThe device: {device} \
             \nThe memory usage is {mem_percent}%.")
