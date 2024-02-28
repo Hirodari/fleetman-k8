@@ -130,9 +130,8 @@ they have the correct config and that the right number exists
 minikube dashboard
 
 
-iam account id: 181224260758
-access key: AKIASUMOOYSLIPOHWSWA
-secret access key: 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
+iam account id: ${iam_account_id}
+
 
 #### permission for iam user to use eks ####
 set up a group: eksadmin with the following permissions
@@ -156,7 +155,7 @@ EKSAccesssLimited json:
                 "ssm:GetParameters"
             ],
             "Resource": [
-                "arn:aws:ssm:*:181224260758:parameter/aws/*",
+                "arn:aws:ssm:*:${iam_account_id}:parameter/aws/*",
                 "arn:aws:ssm:*::parameter/aws/*"
             ],
             "Effect": "Allow"
@@ -213,12 +212,12 @@ AMLimitedAccess json:
                 "iam:ListPolicyVersions"
             ],
             "Resource": [
-                "arn:aws:iam::181224260758:instance-profile/eksctl-*",
-                "arn:aws:iam::181224260758:role/eksctl-*",
-                "arn:aws:iam::181224260758:policy/eksctl-*",
-                "arn:aws:iam::181224260758:oidc-provider/*",
-                "arn:aws:iam::181224260758:role/aws-service-role/eks-nodegroup.amazonaws.com/AWSServiceRoleForAmazonEKSNodegroup",
-                "arn:aws:iam::181224260758:role/eksctl-managed-*"
+                "arn:aws:iam::${iam_account_id}:instance-profile/eksctl-*",
+                "arn:aws:iam::${iam_account_id}:role/eksctl-*",
+                "arn:aws:iam::${iam_account_id}:policy/eksctl-*",
+                "arn:aws:iam::${iam_account_id}:oidc-provider/*",
+                "arn:aws:iam::${iam_account_id}:role/aws-service-role/eks-nodegroup.amazonaws.com/AWSServiceRoleForAmazonEKSNodegroup",
+                "arn:aws:iam::${iam_account_id}:role/eksctl-managed-*"
             ]
         },
         {
@@ -227,7 +226,7 @@ AMLimitedAccess json:
                 "iam:GetRole"
             ],
             "Resource": [
-                "arn:aws:iam::181224260758:role/*"
+                "arn:aws:iam::${iam_account_id}:role/*"
             ]
         },
         {
