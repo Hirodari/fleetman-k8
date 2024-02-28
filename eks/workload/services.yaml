@@ -13,9 +13,9 @@ spec:
   ports:
     - name: http
       port: 80
-      nodePort: 30080
+      # nodePort: 30080
 
-  type: LoadBalancer
+  type: ClusterIP
 ---
 apiVersion: v1
 kind: Service
@@ -32,12 +32,12 @@ spec:
   ports:
     - name: http
       port: 8161
-      nodePort: 30010
+      # nodePort: 30010
 
     - name: endpoint
       port: 61616
 
-  type: NodePort
+  type: ClusterIP
 
 ---
 apiVersion: v1
@@ -74,6 +74,6 @@ spec:
   ports:
     - name: http
       port: 8080
-      nodePort: 30020
+      # nodePort: 30020
 
-  type: NodePort
+  type: ClusterIP

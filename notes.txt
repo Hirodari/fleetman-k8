@@ -273,3 +273,37 @@ search.
 Go to visualize to choose the template and visualize, the search result
 
 This section helped only to deploy Kibana, the next section is for prometheus and Grafana tools
+
+##### Prometheus and Grafana ####
+fluentd and kibana helps to monitor and analyze logs from each pods while
+Prometheus and grafana helps monitor and run a cluster: node healthiness, cpu 
+it is more for monitoring the hardware rather the application inside containers like with
+kibana
+
+prometheus is a multi purpose interface that can be used for many other services, so 
+for a better best suited prometheus for k8s, use chart called kube-prometheus-stack 
+files required: crds.yaml [custom Resource Definition], eks-monitoring.yaml
+make sure you apply crds.yaml first 
+namespace: monitoring
+
+Prometheus is the backbone of the monitoring system, it gathers all the information
+but dont have rich front end 
+
+kubectl get svc -n monitoring
+monitoring-kube-prometheus-prometheus with port 9090 is the service that gives you 
+access to the frontend  
+
+kubectl edit svc monitoring-kube-prometheus-prometheus -n monitoring, set it to 
+loadbalancer if you want to have access incase ingress is not yet installed
+
+node_load[1-3] metrics used by prometheus to monitor overloaded nodes 
+# grafana
+kubectl get svc -n monitoring
+monitoring-grafana: this is the service you want to expose if you need to access the frontend 
+default credentials:
+username: admin 
+password: prom-operator
+
+from the menu, you can choose a better dashboard style: 
+- USE(utilisation, saturation and Error) Method/ Cluster
+- Use Method/ Node 

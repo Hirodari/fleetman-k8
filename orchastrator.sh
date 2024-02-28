@@ -34,5 +34,10 @@ if [ "${HAS_Makefile}" != "false"  ]; then
 	make init-ebs
 	echo -e "${CYAN}deploy workloads"
 	kubectl apply -f eks/workload
+	echo -e "${LIGHT_CYAN}deploy kibana"
 	kubectl apply -f eks/elkStack
+	echo -e "${LIGHT_PURPLE}deploy grafana"
+	kubectl apply -f eks/prometheusStack/crds.yaml
+	kubectl apply -f eks/prometheusStack/eks-monitoring.yaml
+	
 fi
