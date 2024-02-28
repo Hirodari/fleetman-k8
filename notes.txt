@@ -1,0 +1,276 @@
+Kubernetes 
+
+kubectl: use for managing containers in the node
+minikube: use for managing VM itself and this applies only on local machine, no use on cloud services
+
+command line to check the installation
+minikube status
+kubectl cluster-info
+
+comparing Kubernetes to docker-compose
+    - kub8s expect all images already build, there is no build option => make sure our image is hosted in dockerhub
+    - with docker-compose each entry represents a container we want to create, => make one config file to create a container 
+    there is no such thing with Kubernetes, once config file per object we want to create
+    - with kub8s we have to manually setup all networking => make one config file to set up networking
+
+##### deploying our simple k8s app #####
+on the root folder
+mkdir simplek8s
+create a file : client-pod.yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+    name: client-pod 
+    labels: 
+        component: web 
+spec:
+    containers:
+        -   name: client
+            image: stephengrider/multi-client 
+            ports:
+                - containerPort: 3000
+
+create another file to manage the networking setup: client-node-port.yaml
+
+apiVersion: v1
+kind: Service
+metadata: 
+    name: client-node-port
+spec:
+    type: NodePort
+    ports:
+        - ports: 3050
+          targetPort: 3000
+          nodePort: 31515
+    selector:
+        component: web
+
+Object types: Pod, Service, ReplicaController, StatefulSet
+
+####################
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+
+kubectl apply -f hello-world-deployment.yaml
+kubectl get deployments
+kubectl expose deployment hello-world-deployment --type=NodePort --port=80
+curl http://localhost:<NodePort>
+
+kubernetes is a system to deploy a containerized apps
+Nodes are individual vm that runs containers
+masters are vm with a set of programms to manage pods
+pods: runs one or more closely related containders
+ClusterIP: exposes a set of pods to other objects inside the cluster
+NodePort: exposes a set of pods to the external world
+LoadBalancer: legacy way of getting network traffic into a cluster
+Ingress: exposes a set of serivces to the outside world
+# volumes with database, keeps data outside of container but inside a pod 
+# and save data as backup in case the container crashes inside the pod 
+# persistance volumes, keeps data outside the pod
+Secrets is a type of object that securely stores a piece info in the cluster
+such as database password
+
+### install ingress-nginx ###
+github.com/kubernetes/ingres-nginx
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.1/deploy/static/provider/cloud/deploy.yaml
+minikube addons enable ingress
+
+##### k8s cli #####
+
+kubectl apply -f <filename> # feed config file to kubectl
+kubectl get pods # print the status of all running pods
+kubectl get services # print the status of all running pods
+kubectl describe <object type> <object name> # get details about the object 
+kubectl delete -f <config file>
+kubectl get pods -o wide # for more details
+kubectl delete pods/deployment/services <object name>
+kubectl get storageclass
+kubectl get pv # stands for persistent volumes
+kubectl get pvc
+kubectl describe storageclass
+kubectl create secret generic/docker-registry/tls <secret_name> --from-literal \
+key=value
+kubectl create secret generic pgpassword --from-literal PGPASSWORD=test@script123
+kubectl get secrets
+kubectl run postgres-pod --image=postgres --env="POSTGRES_PASSWORD=test@script123"
+
+# imperative command to update image 
+kubectl set image <object type> / <object name> <container name> = <image to use>
+kubectl set image deployment/cart-api cart-api=hirodaridevdock/shopping_cart:v1
+eval $(minikube docker-env) # this command helps to connect your docker server to 
+kubernetes vm machines
+why using <eval $(minikube docker-env)>, for debugging reasons like:
+docker log <container_id>
+docker exec -it <container_id> sh
+
+# same can be done with kubectl 
+kubectl get pods
+kubectl logs <pods_id>
+
+minikube ip # very import this is the ip address to use not localhost
+type/kind: Deployment => maintains a set of identical pods , ensuring that
+they have the correct config and that the right number exists
+minikube dashboard
+
+
+iam account id: 181224260758
+access key: AKIASUMOOYSLIPOHWSWA
+secret access key: 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
+
+#### permission for iam user to use eks ####
+set up a group: eksadmin with the following permissions
+AmazonEC2FullAccess => AWS managed
+AWSCloudFormationFullAccess => AWS managed
+EKSAccesssLimited =>   customer inline
+I => customer inline
+
+EKSAccesssLimited json:
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "eks:*",
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "ssm:GetParameter",
+                "ssm:GetParameters"
+            ],
+            "Resource": [
+                "arn:aws:ssm:*:181224260758:parameter/aws/*",
+                "arn:aws:ssm:*::parameter/aws/*"
+            ],
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "kms:CreateGrant",
+                "kms:DescribeKey"
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "logs:PutRetentionPolicy"
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
+        }
+    ]
+}
+
+AMLimitedAccess json:
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:CreateInstanceProfile",
+                "iam:DeleteInstanceProfile",
+                "iam:GetInstanceProfile",
+                "iam:RemoveRoleFromInstanceProfile",
+                "iam:GetRole",
+                "iam:CreateRole",
+                "iam:DeleteRole",
+                "iam:AttachRolePolicy",
+                "iam:PutRolePolicy",
+                "iam:AddRoleToInstanceProfile",
+                "iam:ListInstanceProfilesForRole",
+                "iam:PassRole",
+                "iam:DetachRolePolicy",
+                "iam:DeleteRolePolicy",
+                "iam:GetRolePolicy",
+                "iam:GetOpenIDConnectProvider",
+                "iam:CreateOpenIDConnectProvider",
+                "iam:DeleteOpenIDConnectProvider",
+                "iam:TagOpenIDConnectProvider",
+                "iam:ListAttachedRolePolicies",
+                "iam:TagRole",
+                "iam:GetPolicy",
+                "iam:CreatePolicy",
+                "iam:DeletePolicy",
+                "iam:ListPolicyVersions"
+            ],
+            "Resource": [
+                "arn:aws:iam::181224260758:instance-profile/eksctl-*",
+                "arn:aws:iam::181224260758:role/eksctl-*",
+                "arn:aws:iam::181224260758:policy/eksctl-*",
+                "arn:aws:iam::181224260758:oidc-provider/*",
+                "arn:aws:iam::181224260758:role/aws-service-role/eks-nodegroup.amazonaws.com/AWSServiceRoleForAmazonEKSNodegroup",
+                "arn:aws:iam::181224260758:role/eksctl-managed-*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetRole"
+            ],
+            "Resource": [
+                "arn:aws:iam::181224260758:role/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:CreateServiceLinkedRole"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "iam:AWSServiceName": [
+                        "eks.amazonaws.com",
+                        "eks-nodegroup.amazonaws.com",
+                        "eks-fargate.amazonaws.com"
+                    ]
+                }
+            }
+        }
+    ]
+}
+
+
+## storage with AWS 
+kubectl get pvc 
+kubectlget pv
+### Monitoring with prometheus and grafana ###
+L: logstash or fluentd, collects or pulls logs from containers 
+E: ElasticSearch is a distributed search and analytic engine, you can store and query data based on apache lucine
+k: Kibana allows you to visualize your ElasticSearch data, nice frontend platform
+fluentd need to be installed in every single node in the cluster(daemonset), where ElasticSearch 
+and kibana can be installed anywhere from the cloud provider solution to a dedicated ec2 server available 
+files: fluentd-config.yaml and Elastic-stack.yaml for ElasticSearch and kibana.
+namespace: kube-system
+
+Kibana: to have access to kibana check the svc and copy LoadBalancer dns name 
+kubectl get svc -n kube-system 
+once you have access to the page, create an index: for our case logstash* will match every day's index 
+logstash* or collected logs for all containers 
+add the timefield name @timestamp
+
+on Kibana menu, click on discovery for elastichsearch engine, you will see logs of every pods.
+Kibana dashboard: you can play around, find a search key words and get the result and save the 
+search.
+Go to visualize to choose the template and visualize, the search result
+
+This section helped only to deploy Kibana, the next section is for prometheus and Grafana tools
