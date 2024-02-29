@@ -389,3 +389,50 @@ Qos: burstable => when request of both cpu and memory are defined without limit
 Qos: BestEffort => when no resource is allocated 
 
 ##### configMap and secrets ####
+kubectl get cm
+configMap servers for mapping environment configs
+configMap format:
+
+##### for environment #######
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: spring-profiles-active-v1
+    namespace: default
+data:
+    SPRING_PROFILES_ACTIVE: "production-microservice"
+
+on the pod side: under environment
+
+containers:
+- name: some-container 
+  image: some-image 
+  env:
+  - name: DATABASE_URL 
+  envFrom:
+  - configMapRef:
+    name: spring-profiles-active-v1
+
+##### Mount volume inside a container or image #######
+same level as env
+volumeMounts:
+- name: database-config-volume
+  mountPath: /etc/any/directory/config
+same levels as container
+volumes:
+- name: database-config-volume
+    configMap:
+        name: global-database-config
+
+the configMap.yaml 
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: global-database-config
+    namespace: default
+data:
+    database.ini:
+        SPRING_PROFILES_ACTIVE=production-microservice
+        DATABASE_URL=https://mydb.somewhere,com:3306
+        DATABASE_PASSWORD=P@ssWord

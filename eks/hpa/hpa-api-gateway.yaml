@@ -13,7 +13,7 @@ items:
     - resource:
         name: cpu
         target:
-          averageUtilization: 150
+          averageUtilization: 50
           type: Utilization
       type: Resource
     scaleTargetRef:

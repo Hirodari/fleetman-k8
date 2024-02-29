@@ -120,11 +120,27 @@ spec:
       containers:
       - name: webapp
         image: richardchesterwood/k8s-fleetman-webapp-angular:release2
+        envFrom:
+        - configMapRef:
+            name: spring-profiles-active-v1
+        volumeMounts:
+        - name: database-config-volume
+          mountPath: /etc/any/directory/config
+      volumes:
+        - name: database-config-volume
+          configMap:
+            name: global-database-config
+        # env:
+        # - name: SPRING_PROFILES_ACTIVE
+          # valueFrom:
+          #   configMapKeyRef:
+          #     name: spring-profiles-active
+          #     key: spring.value
         # resources:
         #   requests:
         #     memory: 60Mi
         #     cpu: 60m
-        env:
-        - name: SPRING_PROFILES_ACTIVE
-          value: production-microservice
+        # env:
+        # - name: SPRING_PROFILES_ACTIVE
+        #   value: production-microservice
       
