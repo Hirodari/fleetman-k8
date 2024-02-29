@@ -307,3 +307,41 @@ password: prom-operator
 from the menu, you can choose a better dashboard style: 
 - USE(utilisation, saturation and Error) Method/ Cluster
 - Use Method/ Node 
+- persistent volume dashboard 
+
+u can choose any dashboard that fit your need 
+
+##### Alert ####
+I need to come back and watch videos to complete this section
+
+##### Requests and limits ####
+Requests can be memory or cpu resources, Requests goes under containers 
+resources:
+    requests:
+        memory: 300Mi
+        cpu: 100m
+    limits:
+        memory: 400Mi
+        cpu: 200m
+
+kubectl describe node_name[minikube]: to check capacity and dispatch allocation
+allocated resources gives you a summary of all
+
+cpu can be allocated in the following way:
+1: 1 full cpu allocation
+0.5: half cpu allocation
+0.1: is equivalent od 100m millicpu or 100 millicores
+
+if the actual memory usage of the container at run time exceeds the limit, the 
+container will be killed not the pod, meaning the container will be restarted 
+by the pod 
+
+if the actual cpu usage of the container at the run time exceeds the limit, 
+the cpu will be "clamped", meaning the container will continue to run while cpu
+will not be allowd to go over and no restart involved.
+
+##### Metrics Profiling ####
+I need to come back and watch videos to complete this section
+
+##### Horizontal Auto Scaling ####
+I need to come back and watch videos to complete this section

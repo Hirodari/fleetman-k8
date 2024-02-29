@@ -76,7 +76,8 @@ spec:
     spec:
       containers:
       - name: api-gateway
-        image: richardchesterwood/k8s-fleetman-api-gateway:release2
+      # performance is not greedy with memory
+        image: richardchesterwood/k8s-fleetman-api-gateway:release2 
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: production-microservice
@@ -90,7 +91,7 @@ spec:
   selector:
     matchLabels:
       app: webapp
-  replicas: 2
+  replicas: 1
   template: # template for the pods
     metadata:
       labels:

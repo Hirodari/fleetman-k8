@@ -30,14 +30,13 @@ echo current directory: `pwd`
 if [ "${HAS_Makefile}" != "false"  ]; then
 	echo "creating cluster fleetman"
 	make create-cluster
-	echo "initializing volumes for our mangodb storage"
+	echo -e "${LIGHT_GREEN}initializing volumes for our mangodb storage"
 	make init-ebs
-	echo -e "${CYAN}deploy workloads"
+	echo -e "${LIGHT_CYAN}deploy workloads"
 	kubectl apply -f eks/workload
 	echo -e "${LIGHT_CYAN}deploy kibana"
 	kubectl apply -f eks/elkStack
 	echo -e "${LIGHT_PURPLE}deploy grafana"
 	kubectl apply -f eks/prometheusStack/crds.yaml
-	kubectl apply -f eks/prometheusStack/eks-monitoring.yaml
-	
+	kubectl apply -f eks/prometheusStack/eks-monitoring.yaml	
 fi
