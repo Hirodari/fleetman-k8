@@ -92,24 +92,24 @@ def main():
                 \nUse : {round(usage_info['percent'], 1)} %"
             )
 
-    cpu_percent, mem_percent = get_system_performance()
-    if cpu_percent > cpu_threshold:
-        send_email("CPU Usage Alert", 
-            f"Summary of CPU usage: \
-            \n{'='*30} \
-            \n{datetime.now().strftime('%d-%m-%Y %H:%M:%S')} \
-            \nHostname: {hostname} \
-            \nThe device: {device} \
-            \nThe CPU usage is {cpu_percent}%.")
+    # cpu_percent, mem_percent = get_system_performance()
+    # if cpu_percent > cpu_threshold:
+    #     send_email("CPU Usage Alert", 
+    #         f"Summary of CPU usage: \
+    #         \n{'='*30} \
+    #         \n{datetime.now().strftime('%d-%m-%Y %H:%M:%S')} \
+    #         \nHostname: {hostname} \
+    #         \nThe device: {device} \
+    #         \nThe CPU usage is {cpu_percent}%.")
 
-    if mem_percent > mem_threshold:
-        send_email("Memory Usage Alert", 
-            f"Summary of Memory usage: \
-            \n{'='*20} \
-            \n{datetime.now().strftime('%d-%m-%Y %H:%M:%S')} \
-            \nHostname: {hostname} \
-            \nThe device: {device} \
-            \nThe memory usage is {mem_percent}%.")
+    # if mem_percent > mem_threshold:
+    #     send_email("Memory Usage Alert", 
+    #         f"Summary of Memory usage: \
+    #         \n{'='*20} \
+    #         \n{datetime.now().strftime('%d-%m-%Y %H:%M:%S')} \
+    #         \nHostname: {hostname} \
+    #         \nThe device: {device} \
+    #         \nThe memory usage is {mem_percent}%.")
 
  
 

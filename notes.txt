@@ -316,9 +316,9 @@ I need to come back and watch videos to complete this section
 
 ##### Requests and limits ####
 Requests can be memory or cpu resources, Requests goes under containers 
-resources:
+resources: # always under image as benchmark
     requests:
-        memory: 300Mi
+        memory: 300Mi # lowest value is 4Mi causes OOMkilled
         cpu: 100m
     limits:
         memory: 400Mi
@@ -340,8 +340,19 @@ if the actual cpu usage of the container at the run time exceeds the limit,
 the cpu will be "clamped", meaning the container will continue to run while cpu
 will not be allowd to go over and no restart involved.
 
+while allocating limits is optional, resources request is good practice allow 
+pods to make good decision
+
 ##### Metrics Profiling ####
-I need to come back and watch videos to complete this section
+addons for minikube 
+
+minikube addons list 
+minikube addons enable metrics-server
+kubectl top pod # gives metrics of pods about memory and cpu
+kubectl top node
+still prefer kubectl describe no minikube
+minikube addons enable dashboard #namespace kube-system
+minikube dashboard # to call the frontend 
 
 ##### Horizontal Auto Scaling ####
 I need to come back and watch videos to complete this section
