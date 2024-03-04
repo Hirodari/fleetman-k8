@@ -1,0 +1,26 @@
+version: 0.2
+
+run-as: ubuntu
+
+phases:
+  install:
+    on-failure: ABORT 
+    commands:
+      - echo "setting up iam user credentials"
+      - bash cicd/configure-named-profile.sh
+      - echo "installing eksctl cli"
+      - bash cicd/eksctl-install.sh
+    # steps:
+  pre_build:
+    run-as: ubuntu
+    on-failure: ABORT 
+    commands:
+      - echo "creating fleetman cluster"
+      - make create-cluster
+    # steps:
+  build:
+    # run-as: Linux-user-name
+    on-failure: ABORT 
+    commands:
+      - echo build started on `date`
+      - bash orchastrator.sh

@@ -311,7 +311,7 @@ spec:
   ports:
   - port: 5601
     protocol: TCP
-    targetPort: ui
+    # targetPort: ui
   selector:
     k8s-app: kibana-logging
   type: LoadBalancer

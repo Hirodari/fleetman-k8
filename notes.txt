@@ -436,3 +436,82 @@ data:
         SPRING_PROFILES_ACTIVE=production-microservice
         DATABASE_URL=https://mydb.somewhere,com:3306
         DATABASE_PASSWORD=P@ssWord
+
+######## secret section #########
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aws-credentials
+data:
+  someAccessKey: MTIzNDU2Nzg5Cg==
+  someSecretKey: ZWNobyBTRUNSRVQxMjM0Cg==
+
+kubectl get secret 
+kubectl get secret -o yaml
+
+######## Ingress section #########
+Ingress controller is a resource which allows us to define routing rules 
+having multiple services connected to the same LoadBalancer
+
+with minikube check ingress: minikube addons list 
+install ingress: minikube addons enable ingress
+namespace: kube-system
+
+kubectl get svc --all-namespacesl
+kubectl get ingress 
+
+ingress: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: fleetman-ingress 
+spec:
+    rules:
+    - host: "fredbitenyo.click"
+      http:
+        paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: webapp
+              port:
+               number: 80
+
+#### AWS section ####
+https://kubernetes.github.io/ingress-nginx/
+1. step: apply or download k8s ingress controller manifest for cloud 
+namespace: ingress-nginx
+wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
+2. step: download nginx ingress controller for NLB
+wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/aws/deploy.yaml
+
+#!/bin/bash
+
+# Get the DNS name of the Ingress load balancer
+INGRESS_DNS=$(aws elbv2 describe-load-balancers  --query 'LoadBalancers[*].DNSName' --output text)
+
+# Update the Ingress YAML file with the obtained DNS name
+cat <<EOF > updated-ingress.yaml
+$(sed "s/<your_ingress_dns>/$INGRESS_DNS/g" original-ingress.yaml)
+EOF
+
+echo "Ingress YAML file updated with the DNS name: $INGRESS_DNS"
+
+aws route53 change-resource-record-sets \
+    --hosted-zone-id <hosted_zone_id> \
+    --change-batch '{
+        "Changes": [{
+            "Action": "CREATE",
+            "ResourceRecordSet": {
+                "Name": "<record_name>",
+                "Type": "A",
+                "AliasTarget": {
+                    "HostedZoneId": "<nlb_hosted_zone_id>",
+                    "DNSName": "<nlb_dns_name>",
+                    "EvaluateTargetHealth": false
+                }
+            }
+        }]
+    }'
+
