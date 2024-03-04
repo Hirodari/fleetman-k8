@@ -1,6 +1,6 @@
 version: 0.2
 
-run-as: ubuntu
+# run-as: ubuntu
 
 phases:
   install:
@@ -12,7 +12,7 @@ phases:
       - bash cicd/eksctl-install.sh
     # steps:
   pre_build:
-    run-as: ubuntu
+    # run-as: ubuntu
     on-failure: ABORT 
     commands:
       - echo "creating fleetman cluster"
