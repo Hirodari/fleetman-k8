@@ -26,11 +26,16 @@ echo -e "${LIGHT_GREEN}initializing volumes for our mangodb storage"
 make init-ebs
 echo -e "${LIGHT_CYAN}deploy workloads"
 kubectl apply -f eks/workload
+sleep 10s
+kubectl get po
+kubectl get svc
 kubectl apply -f eks/database
 echo -e "${LIGHT_PURPLE}deploy ingress controller"
 kubectl apply -f eks/ingress/ingress-controller-cloud.yaml
 kubectl apply -f eks/ingress/nginx-ingress-nlb.yaml
 sleep 10s
+kubectl get pods -n ingress-nginx
+kubectl describe svc ingress-nginx-controller-admission -n ingress-nginx
 echo -e "${LIGHT_GREY}deploy kibana"
 kubectl apply -f eks/elkStack
 echo -e "${LIGHT_PURPLE}deploy prometheus"
@@ -40,6 +45,8 @@ sleep 10s
 echo -e "${LIGHT_GREY}deploy ingress"
 kubectl apply -f eks/ingress/ingress.yaml
 sleep 60s
+kubectl get ingress
+kubectl get ingress -n monitoring
 # Get the DNS name of the Ingress load balancer
 
 RECORD_NAME_QUEUE="queue.fredbitenyo.click"

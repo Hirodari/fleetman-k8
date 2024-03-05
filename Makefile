@@ -3,7 +3,7 @@ create-cluster:
 	--zones=us-east-1a,us-east-1b,us-east-1c,us-east-1d,us-east-1f --nodegroup-name=standard-workers \
 	--nodes=4 --nodes-min=2 --nodes-max=4 --version 1.27 --managed
 delete-cluster:
-	eksctl delete cluster --name "fleetman"
+	eksctl delete cluster --name "fleetman-test"
 init-ebs:
 	bash init_ebs.sh
 update-confg:
