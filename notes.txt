@@ -515,3 +515,20 @@ aws route53 change-resource-record-sets \
         }]
     }'
 
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "ssm:GetParametersByPath",
+                "ssm:GetParameters"
+            ],
+            "Resource": [
+                "arn:aws:ssm:us-east-1:181224260758:parameter/codebuild/AWS_ACCESS_KEY_ID",
+                "arn:aws:ssm:us-east-1:181224260758:parameter/codebuild/AWS_SECRET_ACCESS_KEY"
+            ]
+        }
+    ]
+}

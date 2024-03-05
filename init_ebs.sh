@@ -4,7 +4,7 @@
 set -eu
 
 : ${REGION:="us-east-1"}
-: ${ClusterName:="fleetman-test"}
+: ${ClusterName:="fleetman"}
 : ${aws_account_id:=$(aws sts get-caller-identity --query Account --output text)}
 
 eksctl utils associate-iam-oidc-provider --region=$REGION --cluster=$ClusterName --approve

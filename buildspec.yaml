@@ -16,7 +16,7 @@ phases:
   pre_build:
     commands:
       - echo "creating fleetman cluster"
-      - make delete-cluster
+      # - make create-cluster
     # steps:
   build:
     commands:
