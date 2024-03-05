@@ -20,10 +20,10 @@ phases:
     # run-as: ubuntu
     # on-failure: ABORT 
     commands:
-      - echo "creating fleetman cluster"
-      - make create-cluster
+      - echo "deleting fleetman cluster"
+      - make delete-cluster
     # steps:
   build:
     commands:
       - echo build started on `date`
-      - bash orchastrator.sh
+      # - bash orchastrator.sh
