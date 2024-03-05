@@ -26,14 +26,14 @@ echo -e "${LIGHT_GREEN}initializing volumes for our mangodb storage"
 make init-ebs
 echo -e "${LIGHT_CYAN}deploy workloads"
 kubectl apply -f eks/workload
-sleep 10s
+sleep 30s
 kubectl get po
 kubectl get svc
 kubectl apply -f eks/database
 echo -e "${LIGHT_PURPLE}deploy ingress controller"
 kubectl apply -f eks/ingress/ingress-controller-cloud.yaml
 kubectl apply -f eks/ingress/nginx-ingress-nlb.yaml
-sleep 10s
+sleep 30s
 kubectl get pods -n ingress-nginx
 kubectl describe svc ingress-nginx-controller-admission -n ingress-nginx
 echo -e "${LIGHT_GREY}deploy kibana"
@@ -41,7 +41,7 @@ kubectl apply -f eks/elkStack
 echo -e "${LIGHT_PURPLE}deploy prometheus"
 kubectl apply -f eks/prometheusStack/crds.yaml
 kubectl apply -f eks/prometheusStack/eks-monitoring.yaml	
-sleep 10s
+sleep 30s
 echo -e "${LIGHT_GREY}deploy ingress"
 kubectl apply -f eks/ingress/ingress.yaml
 sleep 60s

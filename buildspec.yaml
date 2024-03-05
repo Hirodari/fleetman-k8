@@ -7,7 +7,6 @@ env:
 phases:
   install: 
     commands:
-      - echo "verifying secret keys $AWS_ACCESS_KEY_ID:" $AWS_SECRET_ACCESS_KEY
       - echo "setting up iam user credentials"
       - bash cicd/configure-named-profile.sh
       - echo "installing eksctl cli"
@@ -16,9 +15,9 @@ phases:
   pre_build:
     commands:
       - echo "creating fleetman cluster"
-      # - make create-cluster
+      - make create-cluster
     # steps:
   build:
     commands:
       - echo build started on `date`
-      # - bash orchastrator.sh
+      - bash orchastrator.sh
