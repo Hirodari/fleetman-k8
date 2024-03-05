@@ -1,14 +1,11 @@
 version: 0.2
 
-# run-as: ubuntu
-
 env:
   parameter-store:
     AWS_ACCESS_KEY_ID: /codebuild/AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: /codebuild/AWS_SECRET_ACCESS_KEY 
 phases:
-  install:
-    # on-failure: ABORT 
+  install: 
     commands:
       - echo "verifying secret keys $AWS_ACCESS_KEY_ID:" $AWS_SECRET_ACCESS_KEY
       - echo "setting up iam user credentials"
@@ -17,8 +14,6 @@ phases:
       - bash cicd/eksctl-install.sh
     # steps:
   pre_build:
-    # run-as: ubuntu
-    # on-failure: ABORT 
     commands:
       - echo "deleting fleetman cluster"
       - make delete-cluster
@@ -26,4 +21,4 @@ phases:
   build:
     commands:
       - echo build started on `date`
-      # - bash orchastrator.sh
+      - bash orchastrator.sh

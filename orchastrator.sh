@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # fail on any error
-set -eu
+# set -eu
 
 # color code
 RED='\033[0;31m'
@@ -136,10 +136,6 @@ aws route53 change-resource-record-sets \
         }
     }]}"
 
-# Z35SXDOTRQ7X7K hosted zone id for application loadbalancer
-# Z26RNL4JYFTOTI hosted zone id for network loadbalancer
-# testing our deployment
-
 # Define a list of variables
 dns=(
 	$RECORD_NAME_QUEUE 
@@ -159,9 +155,3 @@ for record in "${dns[@]}"; do
 		echo -e "${LIGHT_RED}$record failed!"
 	fi
 done
-
-# echo $FLEETMAN_DNS
-# echo $MONITORING_DNS
-# echo $KUBE_SYSTEM_DNS
-# echo hosted zone id: $HOSTEDZONEID
-# a5eaed44bc00647208e05bacb9ffc8c1-a35bd5d727e0c454.elb.us-east-1.amazonaws.com
