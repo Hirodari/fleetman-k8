@@ -1,16 +1,16 @@
 version: 0.2
 
 # run-as: ubuntu
-env:
-    parameter-store:
-        AWS_ACCESS_KEY_ID_PARAM: /codebuild/AWS_ACCESS_KEY_ID
-        AWS_SECRET_ACCESS_KEY_PARAM: 	/codebuild/AWS_SECRET_ACCESS_KEY
 
+env:
+  parameter-store:
+    AWS_ACCESS_KEY_ID: /codebuild/AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: /codebuild/AWS_SECRET_ACCESS_KEY 
 phases:
   install:
-    on-failure: ABORT 
+    # on-failure: ABORT 
     commands:
-      - echo "verifying secret keys $AWS_ACCESS_KEY_ID_PARAM:" $AWS_SECRET_ACCESS_KEY_PARAM
+      - echo "verifying secret keys $AWS_ACCESS_KEY_ID:" $AWS_SECRET_ACCESS_KEY
       - echo "setting up iam user credentials"
       # - bash cicd/configure-named-profile.sh
       # - echo "installing eksctl cli"
