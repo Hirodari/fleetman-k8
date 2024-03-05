@@ -15,9 +15,9 @@ phases:
   pre_build:
     commands:
       - echo "creating fleetman cluster"
-      - make create-cluster
+      - make delete-cluster
     # steps:
   build:
     commands:
       - echo build started on `date`
-      - bash orchastrator.sh
+      # - bash orchastrator.sh
