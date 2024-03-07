@@ -21,6 +21,9 @@ phases:
   build:
     commands:
       - echo build started on `date`
-      - bash blue-green-orchastrator.sh
+      - echo "deleting pods and services"
+      - bash uninstalling-k8s-orchastrator.sh
+      - echo "deleting cluster fleetman"
+      - make delete-cluster
       # - bash eks/scripts/create-record-53.sh
       - echo build finished on `date`

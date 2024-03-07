@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: queue
-        image: richardchesterwood/k8s-fleetman-queue:release1
+        image: richardchesterwood/k8s-fleetman-queue:release2
         # resources:
         #   requests:
         #     memory: 160Mi
@@ -47,7 +47,7 @@ spec:
     spec:
       containers:
       - name: position-simulator
-        image: richardchesterwood/k8s-fleetman-position-simulator:release1
+        image: richardchesterwood/k8s-fleetman-position-simulator:release2
         # resources:
         #   requests:
         #     memory: 120Mi
@@ -78,7 +78,7 @@ spec:
     spec:
       containers:
       - name: position-tracker
-        image: richardchesterwood/k8s-fleetman-position-tracker:release1
+        image: richardchesterwood/k8s-fleetman-position-tracker:release2
         # resources:
         #   requests:
         #     memory: 200Mi
@@ -109,7 +109,7 @@ spec:
       containers:
       - name: api-gateway
       # performance is not greedy with memory
-        image: richardchesterwood/k8s-fleetman-api-gateway:release1
+        image: richardchesterwood/k8s-fleetman-api-gateway:release2
         readinessProbe:
           httpGet:
             path: /
@@ -144,7 +144,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: richardchesterwood/k8s-fleetman-webapp-angular:release1
+        image: richardchesterwood/k8s-fleetman-webapp-angular:release2
         # resources:
         #   requests:
         #     memory: 60Mi
