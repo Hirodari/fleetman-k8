@@ -22,7 +22,7 @@ KUBE_SYSTEM_DNS=$(kubectl get ingress -n kube-system -o json | jq -r ".items[0].
 aws route53 change-resource-record-sets \
     --hosted-zone-id "$HOSTEDZONEID" \
     --change-batch "{\"Changes\":[{
-        \"Action\": \"CREATE\",
+        \"Action\": \"UPSERT\",
         \"ResourceRecordSet\": {
             \"Name\": \"$RECORD_NAME_FLEETMAN\",
             \"Type\": \"A\",
@@ -139,11 +139,12 @@ dns=(
 	$RECORD_NAME_KIBANA
 	)
 
+sleep 50s
 # Iterate through each variable
 echo checking 
 for record in "${dns[@]}"; do
 	HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" $record)
-    if [ "${HTTP_STATUS}" -eq 200 ] || [ "${HTTP_STATUS}" -eq 307 ]; then
+    if [ "${HTTP_STATUS}" -eq 200 ] || [ "${HTTP_STATUS}" -eq 307 || [ "${HTTP_STATUS}" -eq 302] ]; then
 		echo -e "${LIGHT_CYAN}$record successful!"
 	else
 		echo -e "${LIGHT_RED}$record failed!"
