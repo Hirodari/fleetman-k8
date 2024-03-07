@@ -8,9 +8,9 @@ phases:
   install: 
     commands:
       - echo "setting up iam user credentials"
-      - bash cicd/configure-named-profile.sh
+      - bash eks/scripts/configure-named-profile.sh
       - echo "installing eksctl cli"
-      - bash cicd/eksctl-install.sh
+      - bash eks/scripts/eksctl-install.sh
     # steps:
   pre_build:
     commands:
