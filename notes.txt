@@ -532,3 +532,125 @@ aws route53 change-resource-record-sets \
         }
     ]
 }
+
+########### code deploy instructions ############
+# codedeploy agent
+configure amazon ec2 instance to work with aws codedeploy
+REGION=$(curl 169.254.169.254/latest/meta-data/placement/availability-zone/ \sed 's/[a-z]$//')
+sudo yum updatesudo yum install ruby
+sudo yum install wgetcd /home/ec2-user 
+wget https://aws-codedeploy-$REGION.s3.amazonaws.com/latest/install 
+chmod +x ./install 
+usdo ./install auto 
+
+## IAM roles ##
+1. IAM role for instance profile 
+2. IAM role for service profile
+
+instance role name: CodeDeployInstanceRole
+attach these policies: [AmazonEC2RoleforAWSCodeDeploy, AutoScalingNotificationAccessRole]
+instance role: CodeDeployServiceRole
+attach: [AWSCodeDeployRole: edit trust relationship]
+
+format: appspec.yaml 
+
+version:0.0
+os: linux
+files:
+    - source: /index.html
+      destination: /var/www/html 
+hooks:
+    BeforeInstall:
+        - location: scripts:/install_dependencies
+          timeout: 300
+        - location: scripts/start_server
+          timeout: 300
+          runas: root
+    ApplicationStop:
+        - location: scripts/stop_server
+          timeout: 300
+          runas: root
+
+create codedeploy lab template where:
+1. install codedeploy agent through user-data, iam role 
+2. edit trust relationship:
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "codedeploy.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+}
+
+
+##### deploy eks using ecr #####
+docker images --filter reference=webapp
+1. create ecr account 
+2. push ur images to ecr 
+3. 
+
+
+
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: basic-cluster
+  region: eu-north-1
+
+nodeGroups:
+  - name: ng-1
+    instanceType: m5.large
+    desiredCapacity: 10
+    volumeSize: 80
+    ssh:
+      allow: true # will use ~/.ssh/id_rsa.pub as the default ssh key
+  - name: ng-2
+    instanceType: m5.xlarge
+    desiredCapacity: 2
+    volumeSize: 100
+    ssh:
+      publicKeyPath: ~/.ssh/ec2_id_rsa.pub
+
+# for an existing vpc
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: cluster-in-existing-vpc
+  region: eu-north-1
+
+vpc:
+  id: vpc-xxxxx
+  cidr: "192.168.0.0/16"
+  subnets:
+    public:
+        my-new-stack-PublickSubnet01:
+            id: subnet-xxxx
+        my-new-stack-PublickSubnet02:
+            id: subnet-xxxx
+    private:
+      eu-north-1a: { id: subnet-0ff156e0c4a6d300c }
+      eu-north-1b: { id: subnet-0549cdab573695c03 }
+      eu-north-1c: { id: subnet-0426fb4a607393184 }
+
+nodeGroups:
+  - name: ng-1-workers
+    labels: { role: workers }
+    instanceType: m5.xlarge
+    desiredCapacity: 10
+    privateNetworking: true
+  - name: ng-2-builders
+    labels: { role: builders }
+    instanceType: m5.2xlarge
+    desiredCapacity: 2
+    privateNetworking: true
+    iam:
+      withAddonPolicies:
+        imageBuilder: true
+

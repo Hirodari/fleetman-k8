@@ -5,9 +5,9 @@ create-cluster:
 delete-cluster:
 	eksctl delete cluster --name "fleetman"
 init-ebs:
-	bash init_ebs.sh
+	bash eks/scripts/init_ebs.sh
 update-config:
-	aws eks --region "us-east-1" update-kubeconfig --name "fleetman-test"
+	aws eks --region "us-east-1" update-kubeconfig --name "fleetman"
 check-config:
 	kubectl config current-context
 update-config-minikube:

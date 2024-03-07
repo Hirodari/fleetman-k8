@@ -26,6 +26,36 @@ spec:
             port: 
               number: 8161
 
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: webapp-ingress-stage
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: "stage.fredbitenyo.click"
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: fleetman-webapp-stage
+            port: 
+              number: 80
+  - host: "queue.fredbitenyo.click"
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: fleetman-queue-stage
+            port: 
+              number: 8161
+
 --- 
 
 apiVersion: networking.k8s.io/v1
