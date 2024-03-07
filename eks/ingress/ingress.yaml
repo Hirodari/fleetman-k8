@@ -12,7 +12,7 @@ spec:
         path: /
         backend:
           service:
-            name: fleetman-webapp
+            name: fleetman-webapp-stage
             port: 
               number: 80
   - host: "queue.fredbitenyo.click"
@@ -22,7 +22,7 @@ spec:
         path: /
         backend:
           service:
-            name: fleetman-queue
+            name: fleetman-queue-stage
             port: 
               number: 8161
 
@@ -42,7 +42,7 @@ spec:
         path: /
         backend:
           service:
-            name: fleetman-webapp-stage
+            name: fleetman-webapp
             port: 
               number: 80
   - host: "stage.queue.fredbitenyo.click"
@@ -52,7 +52,7 @@ spec:
         path: /
         backend:
           service:
-            name: fleetman-queue-stage
+            name: fleetman-queue
             port: 
               number: 8161
 

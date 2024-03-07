@@ -20,9 +20,22 @@ WHITE='\033[1;37m'
 
 
 # rolling back scenario
-echo "we arolling back to version: Fleet Management System R1.A6.01"
-echo "${LIGHT_CYAN}routing back to production containers"
+echo "Upgrading to version: Fleet Management System R2"
+echo -e "${LIGHT_CYAN}deploy workloads"
+kubectl apply -f eks/workload/stage
+sleep 10s
+echo "${LIGHT_CYAN}routing to stage containers"
 kubectl apply -f eks/ingress/ingress.yaml
+
+dns=(
+	$RECORD_NAME_QUEUE 
+	$RECORD_NAME_FLEETMAN 
+	$RECORD_NAME_PROMETHEUS 
+	$RECORD_NAME_GRAFANA 
+	$RECORD_NAME_KIBANA
+	)
+
+
 echo -e "${LIGHT_PURPLE}checking if the system is up"
 for record in "${dns[@]}"; do
 	HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" $record)
