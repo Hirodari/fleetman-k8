@@ -3,9 +3,9 @@
 echo "let's create some record"
 
 RECORD_NAME_QUEUE="queue.fredbitenyo.click"
-RECORD_NAME_QUEUE_STAGE="stage.queue.fredbitenyo.click"
+# RECORD_NAME_QUEUE_STAGE="stage.queue.fredbitenyo.click"
 RECORD_NAME_FLEETMAN="www.fredbitenyo.click"
-RECORD_NAME_FLEETMAN_STAGE="stage.fredbitenyo.click"
+# RECORD_NAME_FLEETMAN_STAGE="stage.fredbitenyo.click"
 RECORD_NAME_PROMETHEUS="prometheus.fredbitenyo.click"
 RECORD_NAME_GRAFANA="grafana.fredbitenyo.click"
 RECORD_NAME_KIBANA="kibana.fredbitenyo.click"
@@ -19,6 +19,7 @@ KUBE_SYSTEM_DNS=$(kubectl get ingress -n kube-system -o json | jq -r ".items[0].
 
 
 # record for www.fredbitenyo.click
+echo "$RECORD_NAME_FLEETMAN"
 aws route53 change-resource-record-sets \
     --hosted-zone-id "$HOSTEDZONEID" \
     --change-batch "{\"Changes\":[{
@@ -35,21 +36,22 @@ aws route53 change-resource-record-sets \
     }]}"
 
 # record for stage.fredbitenyo.click
-aws route53 change-resource-record-sets \
-    --hosted-zone-id "$HOSTEDZONEID" \
-    --change-batch "{\"Changes\":[{
-        \"Action\": \"UPSERT\",
-        \"ResourceRecordSet\": {
-            \"Name\": \"$RECORD_NAME_FLEETMAN_STAGE\",
-            \"Type\": \"A\",
-            \"AliasTarget\": {
-                \"HostedZoneId\": \"Z26RNL4JYFTOTI\",
-                \"DNSName\": \"$FLEETMAN_DNS\",
-                \"EvaluateTargetHealth\": false
-            }
-        }
-    }]}"
+# aws route53 change-resource-record-sets \
+#     --hosted-zone-id "$HOSTEDZONEID" \
+#     --change-batch "{\"Changes\":[{
+#         \"Action\": \"UPSERT\",
+#         \"ResourceRecordSet\": {
+#             \"Name\": \"$RECORD_NAME_FLEETMAN_STAGE\",
+#             \"Type\": \"A\",
+#             \"AliasTarget\": {
+#                 \"HostedZoneId\": \"Z26RNL4JYFTOTI\",
+#                 \"DNSName\": \"$FLEETMAN_DNS\",
+#                 \"EvaluateTargetHealth\": false
+#             }
+#         }
+#     }]}"
 
+echo "$RECORD_NAME_QUEUE"
 # record for queue.fredbitenyo.click
 aws route53 change-resource-record-sets \
     --hosted-zone-id "$HOSTEDZONEID" \
@@ -67,20 +69,22 @@ aws route53 change-resource-record-sets \
     }]}"
 
 # record for stage.queue.fredbitenyo.click
-aws route53 change-resource-record-sets \
-    --hosted-zone-id "$HOSTEDZONEID" \
-    --change-batch "{\"Changes\":[{
-        \"Action\": \"UPSERT\",
-        \"ResourceRecordSet\": {
-            \"Name\": \"$RECORD_NAME_QUEUE_STAGE\",
-            \"Type\": \"A\",
-            \"AliasTarget\": {
-                \"HostedZoneId\": \"Z26RNL4JYFTOTI\",
-                \"DNSName\": \"$FLEETMAN_DNS\",
-                \"EvaluateTargetHealth\": false
-            }
-        }
-    }]}"
+# aws route53 change-resource-record-sets \
+#     --hosted-zone-id "$HOSTEDZONEID" \
+#     --change-batch "{\"Changes\":[{
+#         \"Action\": \"UPSERT\",
+#         \"ResourceRecordSet\": {
+#             \"Name\": \"$RECORD_NAME_QUEUE_STAGE\",
+#             \"Type\": \"A\",
+#             \"AliasTarget\": {
+#                 \"HostedZoneId\": \"Z26RNL4JYFTOTI\",
+#                 \"DNSName\": \"$FLEETMAN_DNS\",
+#                 \"EvaluateTargetHealth\": false
+#             }
+#         }
+#     }]}"
+
+echo "$RECORD_NAME_PROMETHEUS"
 # record for prometheus.fredbitenyo.click
 aws route53 change-resource-record-sets \
     --hosted-zone-id "$HOSTEDZONEID" \
@@ -97,7 +101,7 @@ aws route53 change-resource-record-sets \
         }
     }]}"
 
-
+echo "$RECORD_NAME_GRAFANA"
 # record for grafana.fredbitenyo.click
 aws route53 change-resource-record-sets \
     --hosted-zone-id "$HOSTEDZONEID" \
@@ -114,6 +118,7 @@ aws route53 change-resource-record-sets \
         }
     }]}"
 
+echo "$RECORD_NAME_KIBANA"
 # record for kibana.fredbitenyo.click
 aws route53 change-resource-record-sets \
     --hosted-zone-id "$HOSTEDZONEID" \
@@ -140,11 +145,11 @@ dns=(
 	)
 
 sleep 50s
-# Iterate through each variable
-echo checking 
+
+echo "checking dns " 
 for record in "${dns[@]}"; do
 	HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" $record)
-    if [ "${HTTP_STATUS}" -eq 200 ] || [ "${HTTP_STATUS}" -eq 307 || [ "${HTTP_STATUS}" -eq 302] ]; then
+    if [ "${HTTP_STATUS}" -eq 200 ] || [ "${HTTP_STATUS}"  -eq 307 ] || [ "${HTTP_STATUS}" -eq 302 ] ; then
 		echo -e "${LIGHT_CYAN}$record successful!"
 	else
 		echo -e "${LIGHT_RED}$record failed!"
