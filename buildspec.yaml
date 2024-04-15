@@ -21,7 +21,7 @@ phases:
   build:
     commands:
       - echo build started on `date`
-      - echo "deploying pods and services"
-      - bash 1st-deployment-orchastrator.sh
-      - bash eks/scripts/create-record-53.sh
+      - echo "deleting pods and services"
+      - bash uninstalling-k8s-orchastrator.sh
+      # - bash eks/scripts/create-record-53.sh
       - echo build finished on `date`

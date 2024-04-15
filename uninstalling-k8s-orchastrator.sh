@@ -3,8 +3,8 @@
 
 echo  "shutting down the project and cluster"
 echo  "deleting workloads"
-kubectl delete -f eks/workload/stage
-kubectl delete -f eks/workload/production
+# kubectl delete -f eks/workload/stage
+kubectl delete -f eks/workload/demo
 echo  "deleting database"
 kubectl delete -f eks/database
 echo  "deleting elkStack"
@@ -19,7 +19,5 @@ kubectl delete -f eks/ingress/ingress.yaml
 sleep 10s
 echo "checking pods and services"
 kubectl get all
-kubectl get all -n monitoring
-kubectl get all -n kube-system
 sleep 5s
 echo "all pods and services down"
