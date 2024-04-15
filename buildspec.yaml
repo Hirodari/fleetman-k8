@@ -14,11 +14,14 @@ phases:
     # steps:
   pre_build:
     commands:
+      - echo "connecting to fleetman cluster"
+      - make update-config
+      - kubectl get all
+      - echo "deleting pods and services"
+      - bash uninstalling-k8s-orchastrator.sh
       - echo "deleting fleetman cluster"
       - make delete-cluster
-      # - echo "connecting to fleetman cluster"
-      # - make update-config
-      # - kubectl get all
+      
     # steps:
   build:
     commands:
