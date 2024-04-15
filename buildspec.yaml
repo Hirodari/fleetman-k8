@@ -14,16 +14,16 @@ phases:
     # steps:
   pre_build:
     commands:
-      - echo "creating fleetman cluster"
-      - make create-cluster
+      - echo "deleting fleetman cluster"
+      - make delete-cluster
       # - echo "connecting to fleetman cluster"
       # - make update-config
-      - kubectl get all
+      # - kubectl get all
     # steps:
   build:
     commands:
       - echo build started on `date`
-      - echo "deleting pods and services"
-      - bash 1st-deployment-orchastrator.sh
-      - bash eks/scripts/create-record-53.sh
+      # - echo "deleting pods and services"
+      # - bash 1st-deployment-orchastrator.sh
+      # - bash eks/scripts/create-record-53.sh
       - echo build finished on `date`
