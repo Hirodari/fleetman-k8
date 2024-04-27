@@ -20,7 +20,7 @@ phases:
       - echo log in in AMAZON ECR
       - aws --version
       - echo $AWS_DEFAULT_REGION
-      - $(aws ecr get-login --no-include-email --region us-east-1)
+      - aws ecr get-login-password | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com
       # - echo "connecting to fleetman cluster"
       # - make update-config
       # - kubectl get all
