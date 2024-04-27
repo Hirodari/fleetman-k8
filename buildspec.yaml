@@ -3,30 +3,35 @@ version: 0.2
 env:
   parameter-store:
     AWS_ACCESS_KEY_ID: /codebuild/AWS_ACCESS_KEY_ID
-    AWS_SECRET_ACCESS_KEY: /codebuild/AWS_SECRET_ACCESS_KEY 
+    AWS_SECRET_ACCESS_KEY: /codebuild/AWS_SECRET_ACCESS_KEY
+    AWS_ACCOUNT_ID: /codebuild/AWS_ACCOUNT_ID 
 phases:
   install: 
     commands:
-      - echo "setting up iam user credentials"
-      - bash eks/scripts/configure-named-profile.sh
-      - echo "installing eksctl cli"
-      - bash eks/scripts/eksctl-install.sh
-    # steps:
+      - docker --version
+      - echo docker installed
+      # - echo "setting up iam user credentials"
+      # - bash eks/scripts/configure-named-profile.sh
+      # - echo "installing eksctl cli"
+      # - bash eks/scripts/eksctl-install.sh
   pre_build:
     commands:
-      - echo "connecting to fleetman cluster"
-      - make update-config
-      - kubectl get all
-      - echo "deleting pods and services"
-      - bash uninstalling-k8s-orchastrator.sh
-      - echo "deleting fleetman cluster"
-      - make delete-cluster
-      
-    # steps:
+      - aws ecr create-repository --repository-name fleetman --region us-east-1
+      - echo log in in AMAZON ECR
+      - aws --version
+      - echo $AWS_DEFAULT_REGION
+      - $(aws ecr get-login --no-include-email --region us-east-1)
+      # - echo "connecting to fleetman cluster"
+      # - make update-config
+      # - kubectl get all
+      # - echo "deleting pods and services"
+      # - bash uninstalling-k8s-orchastrator.sh
+      # - echo "deleting fleetman cluster"
+      # - make delete-cluster
   build:
     commands:
-      - echo build started on `date`
+      # - echo build started on `date`
       # - echo "deleting pods and services"
       # - bash 1st-deployment-orchastrator.sh
       # - bash eks/scripts/create-record-53.sh
-      - echo build finished on `date`
+      # - echo build finished on `date`
