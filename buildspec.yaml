@@ -16,7 +16,6 @@ phases:
       # - bash eks/scripts/eksctl-install.sh
   pre_build:
     commands:
-      - aws ecr create-repository --repository-name fleetman --region us-east-1
       - echo log in in AMAZON ECR
       - aws --version
       - echo $AWS_DEFAULT_REGION
